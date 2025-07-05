@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -35,7 +34,7 @@ public class TaskList {
     public TaskList() {
     }
 
-    public TaskList(UUID id, String title, String description, LocalDateTime created, LocalDateTime updated, List<Task> tasks) {
+    public TaskList(UUID id, String title, String description, List<Task> tasks, LocalDateTime updated, LocalDateTime created) {
         this.id = id;
         this.title = title;
         this.description = description;

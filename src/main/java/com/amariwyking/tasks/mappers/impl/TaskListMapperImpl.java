@@ -25,13 +25,12 @@ public class TaskListMapperImpl implements TaskListMapper {
                 taskListDto.id(),
                 taskListDto.title(),
                 taskListDto.description(),
-                null,
-                null,
                 Optional.ofNullable(taskListDto.tasks())
                         .map(tasks -> tasks.stream()
                                 .map(taskMapper::fromDto)
                                 .toList())
-                        .orElse(null));
+                        .orElse(null), null, null
+        );
     }
 
     public TaskListDto toDto(TaskList taskList) {
