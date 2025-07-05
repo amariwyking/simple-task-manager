@@ -1,11 +1,10 @@
 package com.amariwyking.tasks.controllers;
 
 import com.amariwyking.tasks.domain.dto.TaskListDto;
+import com.amariwyking.tasks.domain.entities.TaskList;
 import com.amariwyking.tasks.mappers.TaskListMapper;
 import com.amariwyking.tasks.services.TaskListService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +26,16 @@ public class TaskListController {
                 .stream()
                 .map(taskListMapper::toDto)
                 .toList();
+    }
+
+    @PostMapping
+    public TaskListDto createTaskList(@RequestBody TaskListDto taskListDto) {
+        // Convert the incoming Task List DTO into an entity using the mapper and store it in the database via the repo
+        TaskList createdTaskList = taskListService.createTaskList(
+                taskListMapper.fromDto(taskListDto)
+        );
+
+        // Return the newly created task list as a DTO
+        return taskListMapper.toDto(createdTaskList);
     }
 }
