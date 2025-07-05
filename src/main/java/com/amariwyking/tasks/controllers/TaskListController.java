@@ -22,6 +22,17 @@ public class TaskListController {
         this.taskListMapper = taskListMapper;
     }
 
+    @PostMapping
+    public TaskListDto createTaskList(@RequestBody TaskListDto taskListDto) {
+        // Convert the incoming Task List DTO into an entity using the mapper and store it in the database via the repo
+        TaskList createdTaskList = taskListService.createTaskList(
+                taskListMapper.fromDto(taskListDto)
+        );
+
+        // Return the newly created task list as a DTO
+        return taskListMapper.toDto(createdTaskList);
+    }
+
     @GetMapping
     public List<TaskListDto> listTaskLists() {
         return taskListService.listTaskLists()
@@ -35,14 +46,14 @@ public class TaskListController {
         return taskListService.getTaskList(taskListId).map(taskListMapper::toDto);
     }
 
-    @PostMapping
-    public TaskListDto createTaskList(@RequestBody TaskListDto taskListDto) {
-        // Convert the incoming Task List DTO into an entity using the mapper and store it in the database via the repo
-        TaskList createdTaskList = taskListService.createTaskList(
+    @PutMapping(path = "/{task_list_id}")
+    public TaskListDto updateTaskList(
+            @PathVariable("task_list_id") UUID taskListId,
+            @RequestBody TaskListDto taskListDto) {
+        TaskList updatedTaskList = taskListService.updateTaskList(
+                taskListId,
                 taskListMapper.fromDto(taskListDto)
         );
-
-        // Return the newly created task list as a DTO
-        return taskListMapper.toDto(createdTaskList);
+        return taskListMapper.toDto(updatedTaskList);
     }
 }
