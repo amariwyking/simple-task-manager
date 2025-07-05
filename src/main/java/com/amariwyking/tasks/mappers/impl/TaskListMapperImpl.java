@@ -4,12 +4,15 @@ import com.amariwyking.tasks.domain.dto.TaskListDto;
 import com.amariwyking.tasks.domain.entities.Task;
 import com.amariwyking.tasks.domain.entities.TaskList;
 import com.amariwyking.tasks.domain.entities.TaskStatus;
+import com.amariwyking.tasks.mappers.TaskListMapper;
 import com.amariwyking.tasks.mappers.TaskMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-public class TaskListMapperImpl {
+@Component
+public class TaskListMapperImpl implements TaskListMapper {
 
     private final TaskMapper taskMapper;
 
