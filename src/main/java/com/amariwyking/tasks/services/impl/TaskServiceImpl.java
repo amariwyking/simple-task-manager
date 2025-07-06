@@ -8,6 +8,7 @@ import com.amariwyking.tasks.repositories.TaskListRepository;
 import com.amariwyking.tasks.repositories.TaskRepository;
 import com.amariwyking.tasks.services.TaskListService;
 import com.amariwyking.tasks.services.TaskService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -65,5 +66,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Optional<Task> getTask(UUID taskListId, UUID taskId) {
         return taskRepository.findByTaskListIdAndId(taskListId, taskId);
+    }
+
+    @Transactional
+    @Override
+    public void deleteTask(UUID taskListId, UUID taskId) {
+        taskRepository.deleteByTaskListIdAndId(taskListId, taskId);
     }
 }
