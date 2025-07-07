@@ -85,3 +85,134 @@ The backend provides the following REST API endpoints:
 *   `POST /api/tasks`: Create a new task.
 *   `PUT /api/tasks/{id}`: Update an existing task.
 *   `DELETE /api/tasks/{id}`: Delete a task.
+
+## Diagrams
+
+### Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    TASK_LISTS {
+        UUID id PK
+        String title
+        String description
+        LocalDateTime created
+        LocalDateTime updated
+    }
+    TASKS {
+        UUID id PK
+        String title
+        String description
+        LocalDateTime due_date
+        TaskStatus status
+        TaskPriority priority
+        UUID task_list_id FK
+        LocalDateTime created
+        LocalDateTime updated
+    }
+    TASK_LISTS ||--o{ TASKS : "has"
+```
+
+### Class Diagram
+
+```mermaid
+classDiagram
+    class TaskListController {
+        +createTaskList(TaskListDto): TaskListDto
+        +listTaskLists(): List~TaskListDto~
+        +getTaskList(UUID): Optional~TaskListDto~
+        +updateTaskList(UUID, TaskListDto): TaskListDto
+        +deleteTaskList(UUID): void
+    }
+    class TaskController {
+        +listTasks(UUID): List~TaskDto~
+        +createTask(UUID, TaskDto): TaskDto
+        +getTask(UUID, UUID): Optional~TaskDto~
+        +updateTask(UUID, UUID, TaskDto): TaskDto
+        +deleteTask(UUID, UUID): void
+    }
+    class TaskListDto {
+        -UUID id
+        -String title
+        -String description
+        -List~TaskDto~ tasks
+    }
+    class TaskDto {
+        -UUID id
+        -String title
+        -String description
+        -LocalDateTime dueDate
+        -TaskStatus status
+        -TaskPriority priority
+    }
+    class TaskListMapper {
+        <<Interface>>
+        +fromDto(TaskListDto): TaskList
+        +toDto(TaskList): TaskListDto
+    }
+    class TaskMapper {
+        <<Interface>>
+        +fromDto(TaskDto): Task
+        +toDto(Task): TaskDto
+    }
+    class TaskListService {
+        <<Interface>>
+        +listTaskLists(): List~TaskList~
+        +createTaskList(TaskList): TaskList
+        +getTaskList(UUID): Optional~TaskList~
+        +updateTaskList(UUID, TaskList): TaskList
+        +deleteTaskList(UUID): void
+    }
+    class TaskService {
+        <<Interface>>
+        +listTasks(UUID): List~Task~
+        +createTask(UUID, Task): Task
+        +getTask(UUID, UUID): Optional~Task~
+        +updateTask(UUID, UUID, Task): Task
+        +deleteTask(UUID, UUID): void
+    }
+    class TaskList {
+        -UUID id
+        -String title
+        -String description
+        -List~Task~ tasks
+    }
+    class Task {
+        -UUID id
+        -String title
+        -String description
+        -LocalDateTime dueDate
+        -TaskStatus status
+        -TaskPriority priority
+        -TaskList taskList
+    }
+    class TaskStatus {
+        <<Enumeration>>
+        OPEN
+        CLOSED
+    }
+    class TaskPriority {
+        <<Enumeration>>
+        HIGH
+        MEDIUM
+        LOW
+    }
+
+    TaskListController --> TaskListService
+    TaskListController --> TaskListMapper
+    TaskController --> TaskService
+    TaskController --> TaskMapper
+    
+    TaskListMapper ..> TaskListDto : uses
+    TaskListMapper ..> TaskList : uses
+    TaskMapper ..> TaskDto : uses
+    TaskMapper ..> Task : uses
+
+    TaskListService ..> TaskList
+    TaskService ..> Task
+
+    Task --> TaskStatus
+    Task --> TaskPriority
+    TaskList "1" -- "0..*" Task
+    TaskListDto "1" -- "0..*" TaskDto
+```
