@@ -9,10 +9,8 @@ const TaskListScreen: React.FC = () => {
 
   // Fetch task lists when the component mounts
   useEffect(() => {
-    if (null == state.taskLists) {
       api.fetchTaskLists();
-    }
-  }, [state]);
+  }, []);
 
   // Get a handle on the router
   const navigate = useNavigate();
